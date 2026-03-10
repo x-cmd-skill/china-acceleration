@@ -1,10 +1,38 @@
-# China Region Network Acceleration Guide
+---
+name: x-cmd-china-acceleration
+description: |
+  China region network acceleration for x-cmd.
+  
+  Configures x-cmd to use China-hosted CDN and sets up package manager mirrors
+  for users in China region.
+  
+  Requires x-cmd to be installed first.
+  
+  **Security Warning**: This skill modifies system package manager configurations
+  (apt, dnf, npm, pip, etc.). Review changes before applying in production.
 
-> How to configure x-cmd for optimal network access in China region
+license: Apache-2.0
+compatibility: POSIX Shell
+
+metadata:
+  author: Li Junhao
+  version: "0.0.1"
+  category: x-cmd-extension
+  tags: [x-cmd, china, network, mirror, cdn]
+  parent: x-cmd
+  repository: https://github.com/x-cmd-skill/china-acceleration
+---
+
+# x-cmd China Region Network Acceleration
+
+> Network acceleration configuration for x-cmd users in China region.
+
+⚠️ **Security Notice**: This skill modifies system package manager configurations.
+Review all changes before applying, especially in production environments.
 
 ---
 
-## Quick Detection & Configuration
+## Quick Start
 
 ```bash
 # 1. Detect if in China region
@@ -36,22 +64,9 @@ x websrc testcn
 |---------|-------------|
 | `x websrc set cn` | Switch to China channel, use domestic CDN |
 | `x websrc set inet` | Switch to international channel |
-| `x websrc set internet` | Same as `inet` |
-| `x websrc set net` | Same as `inet` |
 | `x websrc get` | View current configuration |
 
-Once configured, x-cmd will use **China region hosted network** for accelerated distribution, covering the following resources:
-
-| Module | Description |
-|--------|-------------|
-| `x env use <pkg>` | Software package download and installation |
-| `x theme` | Theme resources download |
-| `x advise` | Command completion data |
-| `x tldr` | TLDR help documents |
-| `x ccal` | Calendar system data |
-| `x pkg` | All module resource downloads |
-
-> In short, all resources that x-cmd needs to download remotely (scripts, data, documents, etc.) will be accelerated through the China region channel.
+Once configured, x-cmd will use **China region hosted network** for accelerated distribution.
 
 ---
 
@@ -117,22 +132,6 @@ x npm mirror set ali
 
 Available mirrors: `npmmirror` (default), `tencent`, `huawei`, `official`
 
-### PNPM
-
-```bash
-x pnpm mirror set ali
-```
-
-Available mirrors: `npmmirror` (default), `tencent`, `huawei`, `official`
-
-### Yarn
-
-```bash
-x yarn mirror set ali
-```
-
-Available mirrors: `npmmirror` (default), `tencent`, `huawei`, `official`
-
 ### Pip (Python)
 
 ```bash
@@ -157,30 +156,6 @@ x cargo mirror set tuna
 
 Available mirrors: `ali` (default), `tuna`, `ustc`, `bfsu`, `sjtu`, `hust`
 
-### Gem (Ruby)
-
-```bash
-x gem mirror set ali
-```
-
-Available mirrors: `ali` (default), `tuna`, `ustc`, `bfsu`, `huawei`, `official`
-
----
-
-## Docker Image Acceleration
-
-Pull base images from AWS ECR (supports ubuntu, debian, alpine, etc.):
-
-```bash
-x docker ecpull ubuntu:22.04
-x docker ecpull debian:12
-x docker ecpull alpine:latest
-```
-
-Use cases:
-- China users: Bypass Docker Hub access restrictions
-- Overseas users: Bypass Docker Hub rate limits
-
 ---
 
 ## Complete Configuration Example
@@ -200,12 +175,9 @@ if x websrc testcn; then
     
     # Language package managers
     x npm mirror set ali 2>/dev/null || true       # Node.js
-    x pnpm mirror set ali 2>/dev/null || true      # PNPM
-    x yarn mirror set ali 2>/dev/null || true      # Yarn
     x pip mirror set ali 2>/dev/null || true       # Python
     x go mirror set ali 2>/dev/null || true        # Go
     x cargo mirror set tuna 2>/dev/null || true    # Rust
-    x gem mirror set ali 2>/dev/null || true       # Ruby
     
     echo "China region acceleration configured"
 fi
@@ -213,7 +185,18 @@ fi
 
 ---
 
+## ⚠️ Security Considerations
+
+| Aspect | Note |
+|--------|------|
+| **System Changes** | Mirror commands modify system package manager configs |
+| **Root Required** | Most mirror commands require sudo/root privileges |
+| **Production** | Review all changes before applying in production |
+| **Verification** | Verify mirror URLs are trusted before use |
+
+---
+
 ## Related Links
 
+- [x-cmd Main Skill](https://github.com/x-cmd-skill/x-cmd)
 - [x-cmd Official Website](https://www.x-cmd.com)
-- [x-cmd Documentation](https://x-cmd.com/llms.txt)
